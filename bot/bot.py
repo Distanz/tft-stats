@@ -132,6 +132,58 @@ async def setup(ctx):
 async def test(ctx):
     await ctx.send("¡Hola! Estoy conectado y funcionando.")
 
+#Ejecución de comando !partida para bot offline
+@bot.command(name="partida")
+async def partida_texto(ctx, *, contenido):
+    try:
+        partes = [p.strip() for p in contenido.split("|")]
+        if len(partes) != 5:
+            await ctx.message.add_reaction("❌")
+            return
+
+        posicion = int(partes[0])
+        aumento_2_1 = partes[1]
+        aumento_3_2 = partes[2]
+        aumento_4_2 = partes[3]
+        composicion = partes[4]
+
+        discord_id = str(ctx.author.id)
+        discord_username = str(ctx.author)
+
+        cursor = db.cursor()
+        cursor.execute("SELECT id FROM usuarios WHERE discord_id = %s", (discord_id,))
+        resultado = cursor.fetchone()
+
+        if not resultado:
+            password_hash = bcrypt.hashpw(discord_username.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+            cursor.execute("""
+                INSERT INTO usuarios (username, password, rol, discord_id)
+                VALUES (%s, %s, %s, %s)
+            """, (discord_username, password_hash, 'user', discord_id))
+            db.commit()
+            user_id = cursor.lastrowid
+        else:
+            user_id = resultado[0]
+
+        parche = obtener_parche_actual()
+
+        cursor.execute("""
+            INSERT INTO partidas (
+                user_id, posicion, composicion,
+                aumento_2_1, aumento_3_2, aumento_4_2, parche
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s)
+        """, (user_id, posicion, composicion, aumento_2_1, aumento_3_2, aumento_4_2, parche))
+        db.commit()
+
+        await ctx.message.add_reaction("✅")
+
+    except Exception as e:
+        print(f"Error en !partida: {e}")
+        await ctx.message.add_reaction("❌")
+    finally:
+        cursor.close()
+
+
 # Evento: on_ready
 @bot.event
 async def on_ready():
