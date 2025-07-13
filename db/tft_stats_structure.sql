@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3307
--- Generation Time: Jul 13, 2025 at 06:31 PM
+-- Generation Time: Jul 13, 2025 at 10:09 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -53,7 +53,8 @@ CREATE TABLE `partidas` (
   `aumento_2_1` varchar(100) NOT NULL,
   `aumento_3_2` varchar(100) NOT NULL,
   `aumento_4_2` varchar(100) NOT NULL,
-  `fecha` datetime DEFAULT current_timestamp()
+  `fecha` datetime DEFAULT current_timestamp(),
+  `parche` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------

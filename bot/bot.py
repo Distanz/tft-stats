@@ -8,6 +8,8 @@ import bcrypt
 from aumentos import todos_los_aumentos
 from db_config import db_config
 
+from datetime import datetime
+
 # Intents y bot
 intents = discord.Intents.default()
 intents.message_content = True
@@ -21,6 +23,27 @@ try:
 except mysql.connector.Error as err:
     print(f"❌ Error al conectar a la base de datos: {err}")
     exit()
+
+#Definir el parch en el que se está trabajando
+def obtener_parche_actual():
+    ahora = datetime.now()
+
+    parches = [
+        ("15.1", datetime(2025, 7, 30, 4), datetime(2025, 8, 13, 3, 59)),
+        ("15.2", datetime(2025, 8, 13, 4), datetime(2025, 8, 27, 3, 59)),
+        ("15.3", datetime(2025, 8, 27, 4), datetime(2025, 9, 10, 3, 59)),
+        ("15.4", datetime(2025, 9, 10, 4), datetime(2025, 9, 24, 3, 59)),
+        ("15.5", datetime(2025, 9, 24, 4), datetime(2025, 10, 8, 3, 59)),
+        ("15.6", datetime(2025, 10, 8, 4), datetime(2025, 10, 22, 3, 59)),
+        ("15.7", datetime(2025, 10, 22, 4), datetime(2025, 11, 5, 3, 59)),
+        ("15.8", datetime(2025, 11, 5, 4), datetime(2025, 11, 19, 3, 59)),
+    ]
+
+    for parche, inicio, fin in parches:
+        if inicio <= ahora <= fin:
+            return parche
+
+    return "desconocido"
 
 # ID del canal (se carga al iniciar)
 canal_id = None
@@ -75,13 +98,16 @@ async def partida(
         else:
             user_id = resultado[0]
 
-        # Insertar partida
+        # Obtener el parche actual
+        parche = obtener_parche_actual()
+
+        # Insertar partida con parche
         cursor.execute("""
             INSERT INTO partidas (
                 user_id, posicion, composicion,
-                aumento_2_1, aumento_3_2, aumento_4_2
-            ) VALUES (%s, %s, %s, %s, %s, %s)
-        """, (user_id, posicion, composicion, aumento_2_1, aumento_3_2, aumento_4_2))
+                aumento_2_1, aumento_3_2, aumento_4_2, parche
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s)
+        """, (user_id, posicion, composicion, aumento_2_1, aumento_3_2, aumento_4_2, parche))
         db.commit()
 
         await interaction.response.send_message("✅ Partida registrada con éxito.", ephemeral=True)
@@ -90,6 +116,7 @@ async def partida(
         await interaction.response.send_message("❌ Error al registrar la partida.", ephemeral=True)
     finally:
         cursor.close()
+
 
 # Comando setup
 @bot.command()
