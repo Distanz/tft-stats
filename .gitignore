@@ -1,0 +1,34 @@
+# Archivos sensibles del bot
+bot/bot_token.txt
+bot/canal_id.txt
+bot/db_config.py
+
+# Archivos sensibles de la web
+web/includes/db.php
+
+# Archivos Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+
+# Entornos virtuales
+venv/
+env/
+ENV/
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Archivos de logs temporales
+*.log
+
+# Archivos ZIP u otros backups
+*.zip
+*.tar.gz
+*.rar
+*.bak
+
+# Opcional: Ignorar node_modules si usas npm en algún momento
+node_modules/
