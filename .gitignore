@@ -6,6 +6,10 @@ bot/db_config.py
 # Archivos sensibles de la web
 web/includes/db.php
 
+#Archivos de alto peso
+/web/assets/images/composiciones/*
+!/web/assets/images/composiciones/.gitkeep
+
 # Archivos Python bytecode
 __pycache__/
 *.pyc

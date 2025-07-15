@@ -19,6 +19,7 @@ if (!defined('BASE_URL')) {
         <li class="nav-item"><a class="nav-link" href="<?= BASE_URL ?>/index.php">Inicio</a></li>
         <li class="nav-item"><a class="nav-link" href="<?= BASE_URL ?>/pages/composiciones.php">Composiciones</a></li>
         <li class="nav-item"><a class="nav-link" href="<?= BASE_URL ?>/pages/aumentos.php">Aumentos</a></li>
+        <li class="nav-item"><a class="nav-link" href="<?= BASE_URL ?>/pages/teambuilder.php">Team Builder</a></li>
 
         <?php if (isset($_SESSION['user_id'])): ?>
           <li class="nav-item"><a class="nav-link" href="<?= BASE_URL ?>/user/registrar_partida.php">Registrar Partida</a></li>

@@ -60,4 +60,66 @@ body::before {
   padding: 2rem;
 }
 
-  
+
+.tablero-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 100px);
+  grid-auto-rows: 86.6px;
+  justify-content: start;
+}
+
+.hex-celda {
+  width: 86.6px; /* Ancho reducido para orientación vertical */
+  height: 86.6px; /* Altura mayor para que la punta mire hacia arriba */
+  background: #115cff;
+  clip-path: polygon(
+    50% 0%, 
+    93% 25%, 
+    93% 75%, 
+    50% 100%, 
+    7% 75%, 
+    7% 25%
+  );
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hex-celda.shifted {
+  transform: translateX(50px);
+}
+
+#tablero {
+  min-height: 300px; /* puedes ajustar el valor según el tamaño deseado */
+  background-color: #222; /* para visualizar el área */
+}
+
+.ficha-miniatura {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 4px;
+  cursor: grab;
+}
+
+.coste-color-1 {
+  background-color: #8f97a0;
+}
+
+.coste-color-2 {
+  background-color: #2aa36e;
+}
+
+.coste-color-3 {
+  background-color: #55a4d3;
+}
+
+.coste-color-4 {
+  background-color: #be30a9;
+}
+
+.coste-color-5 {
+  background-color: #c2a54f;
+}
+
+

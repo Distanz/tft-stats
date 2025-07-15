@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3307
--- Generation Time: Jul 13, 2025 at 10:09 PM
+-- Generation Time: Jul 16, 2025 at 01:52 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -41,6 +41,32 @@ CREATE TABLE `composiciones` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `fichas`
+--
+
+DROP TABLE IF EXISTS `fichas`;
+CREATE TABLE `fichas` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(50) NOT NULL,
+  `coste` int(11) NOT NULL,
+  `imagen` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `fichas_sinergias`
+--
+
+DROP TABLE IF EXISTS `fichas_sinergias`;
+CREATE TABLE `fichas_sinergias` (
+  `ficha_id` int(11) NOT NULL,
+  `sinergia_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `partidas`
 --
 
@@ -55,6 +81,19 @@ CREATE TABLE `partidas` (
   `aumento_4_2` varchar(100) NOT NULL,
   `fecha` datetime DEFAULT current_timestamp(),
   `parche` varchar(10) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sinergias`
+--
+
+DROP TABLE IF EXISTS `sinergias`;
+CREATE TABLE `sinergias` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(50) NOT NULL,
+  `umbrales` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`umbrales`))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -84,11 +123,30 @@ ALTER TABLE `composiciones`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `fichas`
+--
+ALTER TABLE `fichas`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `fichas_sinergias`
+--
+ALTER TABLE `fichas_sinergias`
+  ADD PRIMARY KEY (`ficha_id`,`sinergia_id`),
+  ADD KEY `sinergia_id` (`sinergia_id`);
+
+--
 -- Indexes for table `partidas`
 --
 ALTER TABLE `partidas`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`);
+
+--
+-- Indexes for table `sinergias`
+--
+ALTER TABLE `sinergias`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `usuarios`
@@ -109,9 +167,21 @@ ALTER TABLE `composiciones`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `fichas`
+--
+ALTER TABLE `fichas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `partidas`
 --
 ALTER TABLE `partidas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `sinergias`
+--
+ALTER TABLE `sinergias`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -123,6 +193,13 @@ ALTER TABLE `usuarios`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `fichas_sinergias`
+--
+ALTER TABLE `fichas_sinergias`
+  ADD CONSTRAINT `fichas_sinergias_ibfk_1` FOREIGN KEY (`ficha_id`) REFERENCES `fichas` (`id`),
+  ADD CONSTRAINT `fichas_sinergias_ibfk_2` FOREIGN KEY (`sinergia_id`) REFERENCES `sinergias` (`id`);
 
 --
 -- Constraints for table `partidas`
